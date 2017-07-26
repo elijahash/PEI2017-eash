@@ -1,2 +1,2 @@
 # PEI2017-eash
-Mostly matlab code developed as part of Elijah Ash's PEI internship.
+Mostly MATLAB code developed as part of Elijah Ash's 2017 PEI internship.
