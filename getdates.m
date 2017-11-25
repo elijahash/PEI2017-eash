@@ -18,12 +18,6 @@ function [ hour,day,month,year ] = getdates( ss,extra,timezone )
 defval('extra','')
 defval('timezone',0)
 
-%alternate method:
-%for i = 1:length(ss)
-%     % Extract HHMMSS from the filename
-%     hour2(i)=str2num(ss{i}(28:33));
-% end
-
 days = ss;
 days = regexprep(days,strcat(extra,'PP-S0001-00-HHZ-D-(\w+)-'),'');
 days = strrep(days,'-SAC.mat','');
@@ -31,67 +25,9 @@ days = regexprep(days,'-(\w+)','');
 day = str2num(char(days));  
 
 yrs = ss;
-yrs = strrep(yrs,strcat(extra,'PP-S0001-00-HHZ-D-'),'');
-yrs = regexprep(yrs,'-(\w+)-(\w+)-SAC.mat','');
+yrs = strrep(yrs,strcat(extra,'PP-S0001-00-HHZ-D-(\w+)-'),'');
+yrs = regexprep(yrs,'-(\w+)-(\w+)-(\w+).mat','');
 year = str2num(char(yrs));
-
-hr = ss;
-hr = regexprep(hr,'acc_PP-S0001-00-HHZ-D-(\w+)-','');
-hr = strrep(hr,'-SAC.mat','');
-hr = regexprep(hr,'(\w+)-','');
-hour = str2num(char(hr));
-hour = hour./100;
-
-switch (timezone)
-    case 0
-        if year == 2016
-            if day < 73 || day > 311
-                hour = mod((hour - 500),2400);
-            elseif day > 73 && day < 311
-                hour = mod((hour - 400),2400);
-            elseif day == 73 && hour < 700
-                hour = mod((hour - 500),2400);
-            elseif day == 73 && hour >= 700
-                hour = mod((hour - 400),2400);
-            elseif day == 311 && hour < 600
-                hour = mod((hour - 400),2400);
-            elseif day == 311 && hour >= 600
-                hour = mod((hour - 500),2400);
-            end
-        elseif year == 2017 
-            if day < 71 || day > 309
-                hour = mod((hour - 500),2400);
-            elseif day > 71 && day < 309
-                hour = mod((hour - 400),2400);
-            elseif day == 71 && hour < 700
-                hour = mod((hour - 500),2400);
-            elseif day == 71 && hour >= 700
-                hour = mod((hour - 400),2400);
-            elseif day == 309 && hour < 600
-                hour = mod((hour - 400),2400);
-            elseif day == 309 && hour >= 600
-                hour = mod((hour - 500),2400);
-            end
-        else
-            error('Can only convert to EST for years 2016 and 2017. Please switch timezone to UTC.')
-        end
-        
-        if hour > str2num(char(hr))./100
-            day = day - 1;
-        end
-        
-        if day == 0
-            year = year - 1;
-            if year == 2015 || year == 2017
-                day = 365;
-            elseif year == 2016
-                day = 366;
-            end
-        end
-            
-    case 1
-        % You're done!
-end
 
 if year == 2016
     if day >= 1 && day <= 31
@@ -119,7 +55,7 @@ if year == 2016
     elseif day > 335 && day <= 366
         month = 12;
     end
-elseif year == 2017 || year == 2015
+elseif year == 2017
     if day >= 1 && day <= 31
         month = 1;
     elseif day > 31 && day <= 59
@@ -146,3 +82,55 @@ elseif year == 2017 || year == 2015
         month = 12;
     end       
 end
+
+hr = ss;
+hr = regexprep(hr,'acc_PP-S0001-00-HHZ-D-(\w+)-','');
+hr = strrep(hr,'-SAC.mat','');
+hr = regexprep(hr,'(\w+)-','');
+hour = str2num(char(hr));
+hour = hour./100;
+
+switch (timezone)
+    case 0
+        if year == 2016
+            if day < 73 || day > 311
+                hour = mod((hour - 500),2400)
+            elseif day > 73 && day < 311
+                hour = mod((hour - 400),2400)
+            elseif day == 73 && hour < 200
+                hour = mod((hour - 500),2400)
+            elseif day == 73 && hour >= 200
+                hour = mod((hour - 400),2400)
+            elseif day == 311 && hour < 200
+                hour = mod((hour - 400),2400)
+            elseif day == 311 && hour >= 200
+                hour = mod((hour - 500),2400)
+            end
+        elseif year == 2017 
+            if day < 71 || day > 309
+                hour = mod((hour - 500),2400)
+            elseif day > 71 && day < 309
+                hour = mod((hour - 400),2400)
+            elseif day == 71 && hour < 200
+                hour = mod((hour - 500),2400)
+            elseif day == 71 && hour >= 200
+                hour = mod((hour - 400),2400)
+            elseif day == 309 && hour < 200
+                hour = mod((hour - 400),2400)
+            elseif day == 309 && hour >= 200
+                hour = mod((hour - 500),2400)
+            end
+        else
+            error('Can only convert to EST for years 2016 and 2017. Please switch timezone to UTC.')
+        end
+    case 1
+        % You're done!
+        
+%alternate method:
+%for i = 1:length(ss)
+%     % Extract HHMMSS from the filename
+%     hour2(i)=str2num(ss{i}(28:33));
+% end
+
+end
+

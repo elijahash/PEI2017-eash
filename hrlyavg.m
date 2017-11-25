@@ -30,6 +30,7 @@ for i = 1:length(ss)
    [hour(i)] = getdates(ss{i},extra);     
 end
 
+
 % Inspect 
 % plot(mod(diff(hour),2400)/100,'o')
 

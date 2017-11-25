@@ -5,6 +5,11 @@ function [ logy,linlogax,linticks,xlimlin ] = lin2log(linxaxis,yvalues,method,lo
 % and should be plotted as linear.)
 %   
 %
+% potential error: will return nan values at the end of the frequency axis
+% if there aren't enough values to interpolate properly (has fix)
+% another error: if you're plotting two different curves, make sure they
+% are normalized to the same range in linear space
+%
 %
 % INPUT
 %
@@ -30,7 +35,7 @@ function [ logy,linlogax,linticks,xlimlin ] = lin2log(linxaxis,yvalues,method,lo
 %           actually be plotted.
 
 
-defval('logticks',[1e-3 2e-3 3e-3 4e-3 5e-3 6e-3 7e-3 8e-3 9e-3 1e-2 2e-2...
+defval('logticks',[1e-2 2e-2...
     3e-2 4e-2 5e-2 6e-2 7e-2 8e-2 9e-2 1e-1 2e-1 3e-1 4e-1 5e-1 6e-1 7e-1...
     8e-1 9e-1 1 2 3 4 5 6 7 8 9 10])
 defval('loglim',[1e-2 10])
